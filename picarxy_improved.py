@@ -2,6 +2,10 @@
 sys.path.append(r'/home/pi/picar/Robotsystems_avadhanr/lib')
 """
 #from ezblock import Servo,PWM,fileDB,Pin,ADC
+import logging
+import logdecorator
+import atexit
+
 import time
 try :
     from ezblock import *
@@ -18,11 +22,15 @@ from pin import Pin
 from adc import ADC
 from filedb import fileDB
 
+logging_format = "%( asctime ) s : %( message ) s "
+logging.basicConfig( format = logging_format , level = logging . INFO ,datefmt ="% H :% M :% S ")
+
+logging.getLogger().setLevel( logging.DEBUG )
+
 class Picarx(object):
     PERIOD = 4095
     PRESCALER = 10
     TIMEOUT = 0.02
-
     def __init__(self):
         self.dir_servo_pin = Servo(PWM('P2'))
         self.camera_servo_pin1 = Servo(PWM('P0'))
@@ -168,6 +176,9 @@ class Picarx(object):
             self.set_motor_speed(1, -1*speed)
             self.set_motor_speed(2, speed)  
 
+    
+    @logdecorator.log_on_start( logging.DEBUG," the car begin to move forward with speed: {speed:s}")
+    @logdecorator.log_on_end( logging.DEBUG," the car successfully moved forward")
     def forward(self,speed):
         current_angle = self.dir_current_angle
         if current_angle != 0:
@@ -223,6 +234,9 @@ if __name__ == "__main__":
     px = Picarx()
     px.forward(50)
     time.sleep(1)
+    message = "here goes the message"
+    logging.debug ( message )
+
     px.stop()
     # set_dir_servo_angle(0)
     # time.sleep(1)
