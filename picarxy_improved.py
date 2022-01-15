@@ -1,12 +1,7 @@
 """import sys
-sys.path.append(r'/home/pi/picar-x/lib')
+sys.path.append(r'/home/pi/picar/Robotsystems_avadhanr/lib')
 """
 #from ezblock import Servo,PWM,fileDB,Pin,ADC
-from servo import Servo 
-from pwm import PWM
-from pin import Pin
-from adc import ADC
-from filedb import fileDB
 import time
 try :
     from ezblock import *
@@ -16,6 +11,12 @@ try :
 except ImportError :
     print (" This computer does not appear to be a PiCar - X system ( ezblock is not present ) . Shadowing hardware calls with substitute functions ")
     from sim_ezblock import *
+
+from servo import Servo 
+from pwm import PWM
+from pin import Pin
+from adc import ADC
+from filedb import fileDB
 
 class Picarx(object):
     PERIOD = 4095
