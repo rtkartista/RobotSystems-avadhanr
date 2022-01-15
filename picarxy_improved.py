@@ -11,19 +11,13 @@ try :
     from ezblock import *
     from ezblock import __reset_mcu__
     __reset_mcu__ ()
-    time . sleep (0.01)
+    time.sleep (0.01)
 except ImportError :
     print (" This computer does not appear to be a PiCar - X system ( ezblock is not present ) . Shadowing hardware calls with substitute functions ")
     from sim_ezblock import *
 
-from servo import Servo 
-from pwm import PWM
-from pin import Pin
-from adc import ADC
-from filedb import fileDB
-
-logging_format = "%( asctime ) s : %( message ) s "
-logging.basicConfig( format = logging_format , level = logging . INFO ,datefmt ="% H :% M :% S ")
+logging_format = "%(asctime) s:%(message) s "
+logging.basicConfig( format = logging_format , level = logging.INFO ,datefmt ="%H:%M:%S")
 
 logging.getLogger().setLevel( logging.DEBUG )
 
@@ -237,7 +231,7 @@ if __name__ == "__main__":
     atexit.register(px.stop)
     time.sleep(1)
     message = "here goes the message"
-    logging.debug ( message )
+    logging.debug( message )
 
     px.stop()
     # set_dir_servo_angle(0)
