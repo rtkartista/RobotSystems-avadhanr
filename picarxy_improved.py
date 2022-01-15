@@ -14,9 +14,7 @@ try :
     __reset_mcu__ ()
     time . sleep (0.01)
 except ImportError :
-    print (" This computer does not appear to be a PiCar - X system
-    ( ezblock is not present ) . Shadowing hardware calls with
-    substitute functions ")
+    print (" This computer does not appear to be a PiCar - X system ( ezblock is not present ) . Shadowing hardware calls with substitute functions ")
     from sim_ezblock import *
 
 class Picarx(object):
