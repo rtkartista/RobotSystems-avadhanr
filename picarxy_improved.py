@@ -171,8 +171,8 @@ class Picarx(object):
             self.set_motor_speed(2, speed)  
         return 1
     
-    #@logdecorator.log_on_start( logging.DEBUG," the car begin to move forward with speed: {speed:s}")
-    #@logdecorator.log_on_end( logging.DEBUG," the car successfully moved forward")
+    @logdecorator.log_on_start( logging.DEBUG," the car begin to move forward with speed: {speed!s}") # :s for strings
+    @logdecorator.log_on_end( logging.DEBUG," the car successfully moved forward")
     def forward(self,speed):
         current_angle = self.dir_current_angle
         if current_angle != 0:
@@ -192,7 +192,6 @@ class Picarx(object):
             self.set_motor_speed(1, speed)
             self.set_motor_speed(2, -1*speed)                  
 
-    #@atexit.register
     def stop(self):
         self.set_motor_speed(1, 0)
         self.set_motor_speed(2, 0)
@@ -228,6 +227,7 @@ class Picarx(object):
 if __name__ == "__main__":
     px = Picarx()
     px.forward(5)
+    # shows a command saying KeyboardInterrupt, and calls the func stop
     atexit.register(px.stop)
     time.sleep(1)
     message = "here goes the message"
