@@ -1,6 +1,12 @@
 import RPi.GPIO as GPIO
 import smbus
 import math
+timer = [
+    {
+        "arr": 0
+    }
+] * 4
+
 class Servo(object):
     MAX_PW = 2500
     MIN_PW = 500
