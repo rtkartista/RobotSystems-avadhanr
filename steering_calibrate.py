@@ -9,8 +9,9 @@ logging.basicConfig( format = logging_format , level = logging.INFO ,datefmt ="%
 logging.getLogger().setLevel( logging.DEBUG )
 
 def calibrate_steering(picar):
-
-def move(picar):
+    picar.set_dir_servo_angle(90)
+    
+"""def move(picar):
     #move front
     #move back
     #parallel parking
@@ -22,8 +23,23 @@ def user_input(picar):
     print("Left - 'L', Right - 'R', Front - 'F', Back - 'B'")
     print("Steer+Left - 'SL', Steer+Right - 'SR', Parallel parking - 'PPL' / 'PPR'")
     print("Three-point turning - '3L'/'3R'")
-    print("Type in here ->")
-    #while(1):
+    val = input("Type in here-> ")
+    while(1):
+        if val == "L":
+            picar.set_dir_servo_angle(90)
+            picar.forward(30)
+            time.sleep(5)
+        elif val == "R":
+            picar.set_dir_servo_angle(-90)
+            picar.forward(30)
+            time.sleep(5)
+        elif val == "F":
+            picar.forward(30)
+            time.sleep(5)
+        elif val == "B":
+            picar.backward(30)
+            time.sleep(5)"""
+        
         
 
 if __name__ == "__main__":
