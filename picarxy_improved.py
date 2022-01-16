@@ -60,8 +60,6 @@ class Picarx(object):
         
         atexit.register(self.cleanup)
 
-
-
     def set_motor_speed(self,motor,speed):
         # global cali_speed_value,cali_dir_value
         motor -= 1
@@ -98,7 +96,6 @@ class Picarx(object):
         if value == 1:
             self.cali_dir_value[motor] = -1 * self.cali_dir_value[motor]
         self.config_flie.set("picarx_dir_motor", self.cali_dir_value)
-
 
     def dir_servo_angle_calibration(self,value):
         # global dir_cal_value
@@ -198,7 +195,6 @@ class Picarx(object):
         self.set_motor_speed(1, 0)
         self.set_motor_speed(2, 0)
 
-
     def Get_distance(self):
         timeout=0.01
         trig = Pin('D8')
@@ -232,12 +228,10 @@ if __name__ == "__main__":
     px = Picarx()
     px.forward(5)
     # shows a command saying KeyboardInterrupt, and calls the func stop
-    #atexit.register(px.stop)
+    atexit.register(px.stop)
     time.sleep(1)
     message = "here goes the message"
     logging.debug( message )
-
-    px.stop()
     # set_dir_servo_angle(0)
     # time.sleep(1)
     # self.set_motor_speed(1, 1)
