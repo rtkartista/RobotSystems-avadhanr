@@ -53,6 +53,7 @@ class Picarx(object):
         self.cali_dir_value = [int(i.strip()) for i in self.cali_dir_value.strip("[]").split(",")]
         self.cali_speed_value = [0, 0]
         self.dir_current_angle = 0
+        self.cali_angle = 0
         #初始化PWM引脚
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
@@ -106,8 +107,14 @@ class Picarx(object):
 
     def set_dir_servo_angle(self,value):
         # global dir_cal_value
-        self.dir_current_angle = value
-        angle_value  = value + self.dir_cal_value
+        angle_value  = value + self.cali_angle
+        if abs(angle_value) > 40:
+            if angle_value >= 0:
+                self.dir_current_angle = 40
+            else:
+                self.dir_current_angle = -40
+        else:
+            self.dir_current_angle = angle_value
         print("angle_value:",angle_value)
         # print("set_dir_servo_angle_1:",angle_value)
         # print("set_dir_servo_angle_2:",dir_cal_value)

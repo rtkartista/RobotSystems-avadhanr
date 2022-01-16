@@ -15,9 +15,9 @@ def calibrate_steering(picar):
     #picar.forward(30)
     #time.sleep(5)
 
-    picar.cali_angle = calibrated_ang_error
+    picar.cali_angle = calibration_angle_error
 
-"""def move_pp(picar, dir):
+def move_pp(picar, dir):
     # move forward, make your steering parallel vehicle
     # dir - left - steering right
     # move backward 50%
@@ -33,7 +33,7 @@ def calibrate_steering(picar):
     # steer 0 
     # forward
 
-def three_point_turning(picar, dir):
+def move_3pt(picar, dir):
     # dir - left
     # steer -90deg, forward
     # go backward
@@ -42,17 +42,35 @@ def three_point_turning(picar, dir):
     # dir - right
     # steer +90deg, forward
     # go backward
-    # go forward for 180deg turn 
-
-def move_basic(picar, dir):
-    # with steer (f/b)
-    # without steer (f/b)"""
+    # go forward for 180deg turn
     
-"""def move(picar):
-    #move front
-    #move back
+def move(picar, command):
+    if command == "L":
+        picar.set_dir_servo_angle(-40)
+        forward_improved(picar, 100)
+        time.sleep(3)
+    elif command == "R":
+        picar.set_dir_servo_angle(40)
+        forward_improved(picar, 100)
+        time.sleep(3)
+    if command == "L":
+        picar.set_dir_servo_angle(0)
+        forward_improved(picar, 30)
+        time.sleep(3)
+    elif command == "R":
+        picar.set_dir_servo_angle(0)
+        forward_improved(picar, -30)
+        time.sleep(3)
     #parallel parking
+    elif command == "PPR":
+        move_pp(picar, 1)
+    elif command == "PPL":
+        move_pp(picar, -1)
     #three point turning
+    elif command == "3PR":
+        move_3pt(picar, 1)
+    elif command == "3PL":
+        move_3pt(picar, -1)
 
 def user_input(picar):
     print("Enter the following commands to move the vehicle.")
@@ -62,21 +80,8 @@ def user_input(picar):
     print("Three-point turning - '3L'/'3R'")
     while(1):
         val = input("Type in here-> ")
-        if val == "L":
-            picar.set_dir_servo_angle(90)
-            picar.forward(30)
-            time.sleep(5)
-        elif val == "R":
-            picar.set_dir_servo_angle(-90)
-            picar.forward(30)
-            time.sleep(5)
-        elif val == "F":
-            picar.forward(30)
-            time.sleep(5)
-        elif val == "B":
-            picar.backward(30)
-            time.sleep(5)"""
-
+        move(picar, val)
+        
 def forward_improved(picar, speed):
     # assuming car base = .6m
     # constant angular velocity
@@ -90,20 +95,18 @@ def forward_improved(picar, speed):
     if current_angle != picar.cali_angle:
         # move left/right
         abs_current_angle = abs(current_angle)
-        # if abs_current_angle >= 0:
-        if abs_current_angle > 40:
-            abs_current_angle = 40
-        
-        if (current_angle / abs_current_angle) > 0:
+        if (current_angle / abs_current_angle) < 0:
             speed_left = car_w * turn_radius
             speed_right = -car_w * (turn_radius + base_radius)
+            #print(str(speed_right)+ " "+str(speed_left))
             picar.set_motor_speed(1, speed_left)
-            picar.set_motor_speed(2, speed_right)
-        elif (current_angle / abs_current_angle) < 0:
+            picar.set_motor_speed(2, -1*speed_right)
+        elif (current_angle / abs_current_angle) > 0:
             speed_right = car_w * turn_radius
             speed_left = -car_w * (turn_radius + base_radius)
+            #print(str(speed_right)+ " "+str(speed_left))
             picar.set_motor_speed(1, speed_left)
-            picar.set_motor_speed(2, speed_right)
+            picar.set_motor_speed(2, -1*speed_right)
     else:
         # go straight
         picar.set_motor_speed(1, speed)
@@ -112,18 +115,15 @@ def forward_improved(picar, speed):
 if __name__ == "__main__":
     px = picarxy_improved.Picarx()
     calibrate_steering(px)
-    print("Use "+px.cali_angle+" to modify steering commands.")
+    print("Use "+str(px.cali_angle)+" to modify steering commands.")
     # calibrate everytime the car boots.
     forward_improved(px, 30)
+    time.sleep(1)
+    px.set_dir_servo_angle(15)
+    forward_improved(px, 70)
     time.sleep(3)
-    px.set_dir_servo_angle(30)
-    forward_improved(px, 30)
-    time.sleep(3)
-    """px.set_dir_servo_angle(-30)
-    forward_improved(px,30)
-    time.sleep(3)"""
-    #user_input(px)
-    #move(px)
+    user_input(px)
+
     # shows a command saying KeyboardInterrupt, and calls the func stop
     atexit.register(px.stop)
     message = "Calibrated the steering"
