@@ -57,6 +57,8 @@ class Picarx(object):
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
             pin.prescaler(self.PRESCALER)
+        
+        atexit.register(self.cleanup)
 
 
 
@@ -68,8 +70,8 @@ class Picarx(object):
         elif speed < 0:
             direction = -1 * self.cali_dir_value[motor]
         speed = abs(speed)
-        if speed != 0:
-            speed = int(speed /2 ) + 50
+        #if speed != 0:
+        #    speed = int(speed /2 ) + 50
         speed = speed - self.cali_speed_value[motor]
         if direction < 0:
             self.motor_direction_pins[motor].high()
@@ -223,12 +225,14 @@ class Picarx(object):
         #print(cm)
         return cm
 
+    def cleanup(self):
+        self.stop()
 
 if __name__ == "__main__":
     px = Picarx()
     px.forward(5)
     # shows a command saying KeyboardInterrupt, and calls the func stop
-    atexit.register(px.stop)
+    #atexit.register(px.stop)
     time.sleep(1)
     message = "here goes the message"
     logging.debug( message )
