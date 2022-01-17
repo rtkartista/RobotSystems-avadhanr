@@ -99,14 +99,15 @@ class Picarx(object):
     def set_dir_servo_angle(self,value):
         # global dir_cal_value
         angle_value  = value + self.cali_angle
-        if abs(angle_value) > 40:
-            if angle_value >= 0:
-                self.dir_current_angle = 40
-            else:
-                self.dir_current_angle = -40
+        # 50 = 40 + 10
+        # -30 = -40 + 10
+        if angle_value >= 0 and angle_value > 40 + self.cali_angle:
+            self.dir_current_angle = 40 + self.cali_angle
+        elif angle_value < 0 and angle_value < -40 + self.cali_angle:
+            self.dir_current_angle = -40 + self.cali_angle
         else:
             self.dir_current_angle = angle_value
-        print("angle_value:",angle_value)
+        #print("servo angle after calibration:",self.dir_current_angle)
         # print("set_dir_servo_angle_1:",angle_value)
         # print("set_dir_servo_angle_2:",dir_cal_value)
         self.dir_servo_pin.angle(angle_value)
