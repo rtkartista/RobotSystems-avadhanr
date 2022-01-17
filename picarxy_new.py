@@ -1,6 +1,3 @@
-"""import sys
-sys.path.append(r'/home/pi/picar/Robotsystems_avadhanr/lib')
-"""
 #from ezblock import Servo,PWM,fileDB,Pin,ADC
 import logging
 import logdecorator
@@ -27,25 +24,19 @@ class Picarx(object):
     TIMEOUT = 0.02
     def __init__(self):
         self.dir_servo_pin = Servo(PWM('P2'))
-        self.camera_servo_pin1 = Servo(PWM('P0'))
-        self.camera_servo_pin2 = Servo(PWM('P1'))
         self.config_flie = fileDB('/home/pi/.config')
         self.dir_cal_value = int(self.config_flie.get("picarx_dir_servo", default_value=0))
-        self.cam_cal_value_1 = int(self.config_flie.get("picarx_cam1_servo", default_value=0))
-        self.cam_cal_value_2 = int(self.config_flie.get("picarx_cam2_servo", default_value=0))
         self.dir_servo_pin.angle(self.dir_cal_value)
-        self.camera_servo_pin1.angle(self.cam_cal_value_1)
-        self.camera_servo_pin2.angle(self.cam_cal_value_2)
-
+        
         self.left_rear_pwm_pin = PWM("P13")
         self.right_rear_pwm_pin = PWM("P12")
         self.left_rear_dir_pin = Pin("D4")
         self.right_rear_dir_pin = Pin("D5")
 
-
         self.S0 = ADC('A0')
+        """
         self.S1 = ADC('A1')
-        self.S2 = ADC('A2')
+        self.S2 = ADC('A2')"""
 
         self.motor_direction_pins = [self.left_rear_dir_pin, self.right_rear_dir_pin]
         self.motor_speed_pins = [self.left_rear_pwm_pin, self.right_rear_pwm_pin]
@@ -54,7 +45,7 @@ class Picarx(object):
         self.cali_speed_value = [0, 0]
         self.dir_current_angle = 0
         self.cali_angle = 0
-        #初始化PWM引脚
+        # shows a command saying KeyboardInterrupt, and calls the func stop
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
             pin.prescaler(self.PRESCALER)
@@ -120,43 +111,6 @@ class Picarx(object):
         # print("set_dir_servo_angle_2:",dir_cal_value)
         self.dir_servo_pin.angle(angle_value)
 
-    def camera_servo1_angle_calibration(self,value):
-        # global cam_cal_value_1
-        self.cam_cal_value_1 = value
-        self.config_flie.set("picarx_cam1_servo", "%s"%value)
-        print("cam_cal_value_1:",self.cam_cal_value_1)
-        self.camera_servo_pin1.angle(value)
-
-    def camera_servo2_angle_calibration(self,value):
-        # global cam_cal_value_2
-        self.cam_cal_value_2 = value
-        self.config_flie.set("picarx_cam2_servo", "%s"%value)
-        print("picarx_cam2_servo:",self.cam_cal_value_2)
-        self.camera_servo_pin2.angle(value)
-
-    def set_camera_servo1_angle(self,value):
-        # global cam_cal_value_1
-        self.camera_servo_pin1.angle(-1*(value + -1*self.cam_cal_value_1))
-        # print("self.cam_cal_value_1:",self.cam_cal_value_1)
-        print((value + self.cam_cal_value_1))
-
-    def set_camera_servo2_angle(self,value):
-        # global cam_cal_value_2
-        self.camera_servo_pin2.angle(-1*(value + -1*self.cam_cal_value_2))
-        # print("self.cam_cal_value_2:",self.cam_cal_value_2)
-        print((value + self.cam_cal_value_2))
-
-    def get_adc_value(self):
-        adc_value_list = []
-        adc_value_list.append(self.S0.read())
-        adc_value_list.append(self.S1.read())
-        adc_value_list.append(self.S2.read())
-        return adc_value_list
-
-    def set_power(self,speed):
-        self.set_motor_speed(1, speed)
-        self.set_motor_speed(2, speed) 
-
     def backward(self,speed):
         current_angle = self.dir_current_angle
         if current_angle != 0:
@@ -202,56 +156,12 @@ class Picarx(object):
         self.set_motor_speed(1, 0)
         self.set_motor_speed(2, 0)
 
-    def Get_distance(self):
-        timeout=0.01
-        trig = Pin('D8')
-        echo = Pin('D9')
-
-        trig.low()
-        time.sleep(0.01)
-        trig.high()
-        time.sleep(0.000015)
-        trig.low()
-        pulse_end = 0
-        pulse_start = 0
-        timeout_start = time.time()
-        while echo.value()==0:
-            pulse_start = time.time()
-            if pulse_start - timeout_start > timeout:
-                return -1
-        while echo.value()==1:
-            pulse_end = time.time()
-            if pulse_end - timeout_start > timeout:
-                return -2
-        during = pulse_end - pulse_start
-        cm = round(during * 340 / 2 * 100, 2)
-        #print(cm)
-        return cm
-
     def cleanup(self):
         self.stop()
 
 if __name__ == "__main__":
     px = Picarx()
     px.forward(5)
-    # shows a command saying KeyboardInterrupt, and calls the func stop
-    atexit.register(px.cleanup)
     time.sleep(1)
     message = "here goes the message"
     logging.debug( message )
-    # set_dir_servo_angle(0)
-    # time.sleep(1)
-    # self.set_motor_speed(1, 1)
-    # self.set_motor_speed(2, 1)
-    # camera_servo_pin.angle(0)
-# set_camera_servo1_angle(cam_cal_value_1)
-# set_camera_servo2_angle(cam_cal_value_2)
-# set_dir_servo_angle(dir_cal_value)
-
-# if __name__ == "__main__":
-#     try:
-#         # dir_servo_angle_calibration(-10) 
-#         while 1:
-#             test()
-#     finally: 
-#         stop()

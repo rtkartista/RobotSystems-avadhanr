@@ -16,33 +16,93 @@ def calibrate_steering(picar):
     #time.sleep(5)
 
     picar.cali_angle = calibration_angle_error
+        
+def forward_improved(picar, speed):
+    # assuming car base = .6m
+    # constant angular velocity
+    # left wheel velocity
+    # right wheel velocity
+    turn_radius = .25
+    base_radius = .06
+    car_w = speed/((base_radius/2) + turn_radius)
+    current_angle = picar.dir_current_angle
+
+    if current_angle != picar.cali_angle:
+        # move left/right
+        abs_current_angle = abs(current_angle)
+        if (current_angle / abs_current_angle) < 0:
+            speed_left = car_w * turn_radius
+            speed_right = -car_w * (turn_radius + base_radius)
+            #print(str(speed_right)+ " "+str(speed_left))
+            picar.set_motor_speed(1, speed_left)
+            picar.set_motor_speed(2, -1*speed_right)
+        elif (current_angle / abs_current_angle) > 0:
+            speed_right = car_w * turn_radius
+            speed_left = -car_w * (turn_radius + base_radius)
+            #print(str(speed_right)+ " "+str(speed_left))
+            picar.set_motor_speed(1, speed_left)
+            picar.set_motor_speed(2, -1*speed_right)
+    else:
+        # go straight
+        picar.set_motor_speed(1, speed)
+        picar.set_motor_speed(2, -1*speed)                  
 
 def move_pp(picar, dir):
-    # move forward, make your steering parallel vehicle
-    # dir - left - steering right
-    # move backward 50%
-    # right - steering left
-    # move - backward 50%
-    # steer 0 
-    # forward
-    #==================================================
-    # dir - right - steering left
-    # move backward 50%
-    # dir - left - steering right
-    # move - backward 50%
-    # steer 0 
-    # forward
+    if dir == -1:
+        # start at the current location
+        # steer right, move back
+        # steer left, move back
+        # steer0 forward
+        picar.set_dir_servo_angle(40)
+        forward_improved(picar, -100)
+        time.sleep(3)
+        picar.set_dir_servo_angle(-40)
+        forward_improved(picar, -100)
+        time.sleep(3)
+        picar.set_dir_servo_angle(0)
+        forward_improved(picar, 100)
+        time.sleep(1)
+    else:
+        # start at the current location
+        # steer left, move back
+        # steer right, move back
+        # steer0 forward
+        picar.set_dir_servo_angle(-40)
+        forward_improved(picar, -100)
+        time.sleep(3)
+        picar.set_dir_servo_angle(40)
+        forward_improved(picar, -100)
+        time.sleep(3)
+        picar.set_dir_servo_angle(0)
+        forward_improved(picar, 100)
+        time.sleep(1)
 
 def move_3pt(picar, dir):
-    # dir - left
-    # steer -90deg, forward
-    # go backward
-    # go forward for 180deg turn 
-    #==============================
-    # dir - right
-    # steer +90deg, forward
-    # go backward
-    # go forward for 180deg turn
+    if dir == -1:
+        # steer -90deg, forward
+        # go backward
+        # go forward for 180deg turn 
+        picar.set_dir_servo_angle(40)
+        forward_improved(picar, 100)
+        time.sleep(5)
+        forward_improved(picar, -100)
+        time.sleep(3)
+        forward_improved(picar, 100)
+        time.sleep(3)
+        picar.set_dir_servo_angle(0)
+
+    else:
+        # steer +90deg, forward
+        # go backward
+        # go forward for 180deg turn
+        picar.set_dir_servo_angle(-40)
+        forward_improved(picar, 100)
+        time.sleep(5)
+        forward_improved(picar, -100)
+        time.sleep(3)
+        forward_improved(picar, 100)
+        time.sleep(3)
+        picar.set_dir_servo_angle(0)
     
 def move(picar, command):
     if command == "L":
@@ -81,37 +141,7 @@ def user_input(picar):
     while(1):
         val = input("Type in here-> ")
         move(picar, val)
-        
-def forward_improved(picar, speed):
-    # assuming car base = .6m
-    # constant angular velocity
-    # left wheel velocity
-    # right wheel velocity
-    turn_radius = .25
-    base_radius = .6
-    car_w = speed/((base_radius/2) + turn_radius)
-    current_angle = picar.dir_current_angle
 
-    if current_angle != picar.cali_angle:
-        # move left/right
-        abs_current_angle = abs(current_angle)
-        if (current_angle / abs_current_angle) < 0:
-            speed_left = car_w * turn_radius
-            speed_right = -car_w * (turn_radius + base_radius)
-            #print(str(speed_right)+ " "+str(speed_left))
-            picar.set_motor_speed(1, speed_left)
-            picar.set_motor_speed(2, -1*speed_right)
-        elif (current_angle / abs_current_angle) > 0:
-            speed_right = car_w * turn_radius
-            speed_left = -car_w * (turn_radius + base_radius)
-            #print(str(speed_right)+ " "+str(speed_left))
-            picar.set_motor_speed(1, speed_left)
-            picar.set_motor_speed(2, -1*speed_right)
-    else:
-        # go straight
-        picar.set_motor_speed(1, speed)
-        picar.set_motor_speed(2, -1*speed)                  
-            
 if __name__ == "__main__":
     px = picarxy_improved.Picarx()
     calibrate_steering(px)
