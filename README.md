@@ -7,9 +7,9 @@
 - <img src="Media/Week2/steer.gif" width="779" height="414" />
 
 3. Parallel Parking + left 
-- <img src="Media/Week2/ppl.gif" width="779" height="414" />
+- <img src="Media/Week2/ppl.gif" width="414" height="414" />
 4. Parallel Parking + right 
-- <img src="Media/Week2/ppr.gif" width="779" height="414" />
+- <img src="Media/Week2/ppr.gif" width="414" height="414" />
 
 5. Three point turning + left 
 - <img src="Media/Week2/3ptl.gif" width="779" height="414" />
