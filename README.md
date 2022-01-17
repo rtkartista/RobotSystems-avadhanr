@@ -31,7 +31,7 @@
 
 ### Improving Picar code in *picarxy_imporved.py* & *steering_calibrate.py*
 - added atexit funtions in the class *__init__* function
-- due to placement error while installing the servo, the caliration angle for the servo is -10deg. At the start of the motion, the vehicle is calibrated. This angle is also saved as a class variable and used in the function *set_dir_servo_angle* to give out correct steering results 
+- due to placement error while installing the servo, the caliration angle for the servo is -5deg. At the start of the motion, the vehicle is calibrated. This angle is also saved as a class variable and used in the function *set_dir_servo_angle* to give out correct steering results 
 - The friction contibution from the *set_motor_speed* method is also removed and it was obseved that my vehicle moved at 30m/s after overcoming static friction.
 - a forward_imporved function is written to account for variation of motor speeds in both the directions when the vehicle has a sterr angle. 
     * Base width is assumed to be 12cm
@@ -39,6 +39,7 @@
     * Based on the formule *V_car = w_car \* turn_radius*, *V_left* and *V_right* are calulated by first calcuating the *w_car* and later by substituting different effective *turn_radius* for each wheel.
 
 ### Maneuvering
+#### Disclaimer: since the friction influence is removed from the motor commands, trimming of velocities is needed to exactly perform the below maneuvers on new surfaces. The videos shown above were performed on carpeted floors. Another factor affecting the motor speeds is the battery charge. 
 A *user_input* function was written in the *sterring_calibrate.py* script which asks the user for a input and executes the following motion:
 1. Moving forward/backwards with or without sterring - using the forward_improved function, based on the user input the vehicle moves front or back
 2. Parallel parking - using the move_pp function, based on the user input, the vehicle performs this action.
