@@ -9,7 +9,7 @@ logging.basicConfig( format = logging_format , level = logging.INFO ,datefmt ="%
 logging.getLogger().setLevel( logging.DEBUG )
 
 def calibrate_steering(picar):
-    calibration_angle_error = -10
+    calibration_angle_error = -5
     picar.set_dir_servo_angle(calibration_angle_error)
     time.sleep(2)
     #picar.forward(30)
@@ -53,32 +53,34 @@ def move_pp(picar, dir):
         # steer right, move back
         # steer left, move back
         # steer0 forward
-        picar.set_dir_servo_angle(40)
-        forward_improved(picar, -100)
-        time.sleep(3)
-        picar.set_dir_servo_angle(-40)
-        forward_improved(picar, -100)
-        time.sleep(3)
+        picar.set_dir_servo_angle(-31)
+        forward_improved(picar, -70)
+        time.sleep(.45)
+        picar.set_dir_servo_angle(28)
+        forward_improved(picar, -70)
+        time.sleep(.4)
         picar.set_dir_servo_angle(0)
-        forward_improved(picar, 100)
+        forward_improved(picar, 30)
         time.sleep(1)
+        picar.stop()
     else:
         # start at the current location
         # steer left, move back
         # steer right, move back
         # steer0 forward
-        picar.set_dir_servo_angle(-40)
-        forward_improved(picar, -100)
-        time.sleep(3)
         picar.set_dir_servo_angle(40)
-        forward_improved(picar, -100)
-        time.sleep(3)
+        forward_improved(picar, -70)
+        time.sleep(.45)
+        picar.set_dir_servo_angle(-30)
+        forward_improved(picar, -70)
+        time.sleep(.41)
         picar.set_dir_servo_angle(0)
-        forward_improved(picar, 100)
+        forward_improved(picar, 30)
         time.sleep(1)
+        picar.stop()
 
 def move_3pt(picar, dir):
-        if dir == -1:
+    if dir == -1:
         # steer -90deg, forward
         # go backward
         # go forward for 180deg turn 
@@ -92,7 +94,7 @@ def move_3pt(picar, dir):
         forward_improved(picar, 70)
         time.sleep(.9)
         picar.set_dir_servo_angle(0)
-else:
+    else:
         # steer -90deg, forward
         # go backward
         # go forward for 180deg turn 
@@ -106,24 +108,27 @@ else:
         forward_improved(picar, 70)
         time.sleep(.9)
         picar.set_dir_servo_angle(0)
-    
 def move(picar, command):
     if command == "L":
         picar.set_dir_servo_angle(-40)
-        forward_improved(picar, 100)
-        time.sleep(3)
+        forward_improved(picar, 70)
+        time.sleep(1)
+        picar.stop()
     elif command == "R":
         picar.set_dir_servo_angle(40)
-        forward_improved(picar, 100)
-        time.sleep(3)
-    if command == "L":
+        forward_improved(picar, 70)
+        time.sleep(1)
+        picar.stop()
+    if command == "F":
         picar.set_dir_servo_angle(0)
         forward_improved(picar, 30)
         time.sleep(3)
-    elif command == "R":
+        picar.stop()
+    elif command == "B":
         picar.set_dir_servo_angle(0)
         forward_improved(picar, -30)
         time.sleep(3)
+        picar.stop()
     #parallel parking
     elif command == "PPR":
         move_pp(picar, 1)
@@ -139,8 +144,8 @@ def user_input(picar):
     print("Enter the following commands to move the vehicle.")
     print("-------------------------------------------------")
     print("Left - 'L', Right - 'R', Front - 'F', Back - 'B'")
-    print("Steer+Left - 'SL', Steer+Right - 'SR', Parallel parking - 'PPL' / 'PPR'")
-    print("Three-point turning - '3L'/'3R'")
+    print("Parallel parking - 'PPL' / 'PPR'")
+    print("Three-point turning - '3PL'/'3PR'")
     while(1):
         val = input("Type in here-> ")
         move(picar, val)
