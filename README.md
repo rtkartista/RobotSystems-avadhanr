@@ -2,12 +2,12 @@
 ## Motor Commands
 ### Media
 1. Car moving front and back 
-* <img src="FB.gif" width="779" height="414" />
+* <img src="fb.gif" width="779" height="414" />
 2. Steering + moving left and right 
-- <img src="Steer.gif" width="779" height="414" />
+- <img src="steer.gif" width="779" height="414" />
 
 3. Parallel Parking + left 
-- <img src="ppl_Trim.gif" width="779" height="414" />
+- <img src="ppl.gif" width="779" height="414" />
 4. Parallel Parking + right 
 - <img src="ppr.gif" width="779" height="414" />
 
