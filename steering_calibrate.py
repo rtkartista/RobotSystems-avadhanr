@@ -78,17 +78,19 @@ def move_pp(picar, dir):
         time.sleep(1)
 
 def move_3pt(picar, dir):
-    if dir == -1:
+        if dir == -1:
         # steer -90deg, forward
         # go backward
         # go forward for 180deg turn 
+        picar.set_dir_servo_angle(-40)
+        forward_improved(picar, 70)
+        time.sleep(1)
         picar.set_dir_servo_angle(40)
-        forward_improved(picar, 100)
-        time.sleep(5)
-        forward_improved(picar, -100)
-        time.sleep(3)
-        forward_improved(picar, 100)
-        time.sleep(3)
+        forward_improved(picar, -90)
+        time.sleep(.9)
+        picar.set_dir_servo_angle(-22)
+        forward_improved(picar, 70)
+        time.sleep(.9)
         picar.set_dir_servo_angle(0)
 
     else:
