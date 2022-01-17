@@ -22,7 +22,7 @@ def forward_improved(picar, speed):
     # constant angular velocity
     # left wheel velocity
     # right wheel velocity
-    turn_radius = .25
+    turn_radius = .15
     base_radius = .06
     car_w = speed/((base_radius/2) + turn_radius)
     current_angle = picar.dir_current_angle
@@ -32,20 +32,20 @@ def forward_improved(picar, speed):
         abs_current_angle = abs(current_angle)
         if (current_angle / abs_current_angle) < 0:
             speed_left = car_w * turn_radius
-            speed_right = -car_w * (turn_radius + base_radius)
+            speed_right = car_w * (turn_radius + base_radius)
             #print(str(speed_right)+ " "+str(speed_left))
             picar.set_motor_speed(1, speed_left)
-            picar.set_motor_speed(2, -1*speed_right)
+            picar.set_motor_speed(2, -speed_right)
         elif (current_angle / abs_current_angle) > 0:
             speed_right = car_w * turn_radius
-            speed_left = -car_w * (turn_radius + base_radius)
+            speed_left = car_w * (turn_radius + base_radius)
             #print(str(speed_right)+ " "+str(speed_left))
             picar.set_motor_speed(1, speed_left)
-            picar.set_motor_speed(2, -1*speed_right)
+            picar.set_motor_speed(2, -speed_right)
     else:
         # go straight
         picar.set_motor_speed(1, speed)
-        picar.set_motor_speed(2, -1*speed)                  
+        picar.set_motor_speed(2, -speed)                  
 
 def move_pp(picar, dir):
     if dir == -1:

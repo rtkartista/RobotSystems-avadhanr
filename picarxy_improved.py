@@ -111,11 +111,11 @@ class Picarx(object):
         # 50 = 40 + 10
         # -30 = -40 + 10
         if angle_value >= 0 and angle_value > 40 - self.cali_angle:
-			self.dir_current_angle = 40 - self.cali_angle
-		elif angle_value < 0 and angle_value < -40 - self.cali_angle:
-			self.dir_current_angle = -40 - self.cali_angle
-		else:
-			self.dir_current_angle = angle_value
+            self.dir_current_angle = 40 - self.cali_angle
+        elif angle_value < 0 and angle_value < -40 - self.cali_angle:
+            self.dir_current_angle = -40 - self.cali_angle
+        else:
+            self.dir_current_angle = angle_value
         print("angle_value:",angle_value)
         # print("set_dir_servo_angle_1:",angle_value)
         # print("set_dir_servo_angle_2:",dir_cal_value)

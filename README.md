@@ -1,24 +1,19 @@
 # Picar - Intro to Robotics 2
 ## Motor Commands
 ### Media
-1. Car moving front 
+1. Car moving front and back 
 * <img src="Media/Week2/w2a.mkv" width="779" height="414" />
-2. Car moving back  
-* <img src="Media/Week2/course_code_structure.png" width="779" height="414" />
-
-3. Steering + moving front 
-- <img src="Media/Week2/course_code_structure.png" width="779" height="414" />
-4. Steering + moving back 
+2. Steering + moving left and right 
 - <img src="Media/Week2/course_code_structure.png" width="779" height="414" />
 
-5. Parallel Parking + left 
+3. Parallel Parking + left 
 - <img src="Media/Week2/course_code_structure.png" width="779" height="414" />
-6. Parallel Parking + right 
+4. Parallel Parking + right 
 - <img src="Media/Week2/course_code_structure.png" width="779" height="414" />
 
-7. Three point turning + left 
+5. Three point turning + left 
 - <img src="Media/Week2/course_code_structure.png" width="779" height="414" />
-8. Three point turning + right 
+6. Three point turning + right 
 - <img src="Media/Week2/course_code_structure.png" width="779" height="414" />
 
 ### Gather code pieces
