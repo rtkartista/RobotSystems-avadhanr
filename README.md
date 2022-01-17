@@ -2,19 +2,19 @@
 ## Motor Commands
 ### Media
 1. Car moving front and back 
-* <img src="FB.mp4" width="779" height="414" />
+* <img src="FB.gif" width="779" height="414" />
 2. Steering + moving left and right 
-- <img src="Steer.mp4" width="779" height="414" />
+- <img src="Steer.gif" width="779" height="414" />
 
 3. Parallel Parking + left 
-- <img src="ppl_Trim.mp4" width="779" height="414" />
+- <img src="ppl_Trim.gif" width="779" height="414" />
 4. Parallel Parking + right 
-- <img src="ppr.mp4" width="779" height="414" />
+- <img src="ppr.gif" width="779" height="414" />
 
 5. Three point turning + left 
-- <img src="3ptl.mp4" width="779" height="414" />
+- <img src="3ptl.gif" width="779" height="414" />
 6. Three point turning + right 
-- <img src="3ptr.mp4" width="779" height="414" />
+- <img src="3ptr.gif" width="779" height="414" />
 
 ### Gather code pieces
 - created a file *sim_ezblock.py* and added the classes used in the picarxy.py example.
