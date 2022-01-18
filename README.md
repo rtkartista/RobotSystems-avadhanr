@@ -1,5 +1,5 @@
 # Picar - Intro to Robotics 2
-## Motor Commands
+## Motor Commands - Not autonomous
 ### Media
 1. Car moving front and back 
 * <img src="Media/Week2/fb.gif" width="779" height="414" />
