@@ -265,17 +265,22 @@ class Interpreter(object):
             d['diff'] = diff
             return d
         # l l d
-        elif fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] > self.sensitivity:
+        # d l l
+        elif (fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] > self.sensitivity) or \
+        (fl_list[0] <= self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity):
             diff = fl_list[1] - fl_list[2]
             d['str'] = 'right'
             d['diff'] = diff
             return d
         # d d l
-        elif fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity:
+        # d l l
+        elif (fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity) or \
+            (fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity):
             diff = fl_list[1] - fl_list[2]
             d['str'] = 'left'
             d['diff'] = diff
             return d
+         
         # robust to lighting conditions
         # [-1, 1] with respect to a edge detected
         # +1 = line left to the robot
@@ -299,13 +304,11 @@ class Controller(object):
         if gm_status['str'] == 'forward':
             print("Moving Forward")
             self.picar.forward_improved(self.velocity) 
-
         elif gm_status['str'] == 'right':
             steer_angle = self.scaling_fac * gm_status['diff']
             self.picar.set_dir_servo_angle(steer_angle)
             print("Moving Right")
             self.picar.forward_improved(self.velocity) 
-
         elif gm_status['str'] == 'left':
             steer_angle = self.scaling_fac * gm_status['diff']
             self.picar.set_dir_servo_angle(steer_angle)
