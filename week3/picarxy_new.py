@@ -265,9 +265,9 @@ class Interpreter(object):
             d['diff'] = diff
             return d
         # l l d
-        # d l l
+        # l d d
         elif (fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity) or \
-        (fl_list[0] <= self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity):
+        (fl_list[0] > self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] <= self.sensitivity):
             diff = fl_list[1] - fl_list[2]
             d['str'] = 'right'
             d['diff'] = diff
