@@ -323,7 +323,7 @@ if __name__ == "__main__":
 
     gm = Interpreter(500)
     px = Picarx()
-    cx = Controller()
+    cx = Controller(px)
     while True:
         gm_val_list = gm.get_grayscale_data()
         print("gm_val_list:",gm_val_list)
