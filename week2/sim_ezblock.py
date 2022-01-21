@@ -1,6 +1,9 @@
 import RPi.GPIO as GPIO
 import smbus
 import math
+# this file contains the classes from the picar-x library
+# if the library is not downloaded on the machine, 
+# this file can be used to import important classes and its methods to move the vehicle
 timer = [
     {
         "arr": 0
@@ -178,7 +181,6 @@ class I2C(object):
     def writeto_mem(self, addr, memaddr, data):
         self.mem_write(data, addr, memaddr)
 
-
 class PWM(I2C):
     REG_CHN = 0x20
     REG_FRE = 0x30
@@ -282,7 +284,6 @@ class PWM(I2C):
             # print(temp)
             pulse_width = temp * timer[self.timer]["arr"]
             self.pulse_width(pulse_width)
-
 
 class Pin(object):
     OUT = GPIO.OUT
@@ -482,7 +483,6 @@ class Pin(object):
         def __init__(self):
             pass
 
-
 class ADC(I2C):
     ADDR=0x14                   # 扩展板的地址为0x14
 
@@ -518,8 +518,7 @@ class ADC(I2C):
         return value
 
     def read_voltage(self):                             # 将读取的数据转化为电压值（0~3.3V）
-        return self.read*3.3/4095
-        
+        return self.read*3.3/4095    
 
 class fileDB(object):
 	"""A file based database.

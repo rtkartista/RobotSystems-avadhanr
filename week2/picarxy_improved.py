@@ -6,6 +6,8 @@ import logging
 import logdecorator
 import atexit
 
+# check if the picar-x lib is installed 
+# if not import the modules from the newly created file sim_ezblock
 import time
 try :
     from ezblock import *
@@ -16,9 +18,9 @@ except ImportError :
     print (" This computer does not appear to be a PiCar - X system ( ezblock is not present ) . Shadowing hardware calls with substitute functions ")
     from sim_ezblock import *
 
+# effective way of logging messages with timestamps
 logging_format = "%(asctime) s:%(message) s "
 logging.basicConfig( format = logging_format , level = logging.INFO ,datefmt ="%H:%M:%S")
-
 logging.getLogger().setLevel( logging.DEBUG )
 
 class Picarx(object):
@@ -59,8 +61,11 @@ class Picarx(object):
             pin.period(self.PERIOD)
             pin.prescaler(self.PRESCALER)
         
+        # shows a command saying KeyboardInterrupt, and calls the function cleanup from the picar methods
         atexit.register(self.cleanup)
 
+
+    # commented out the speed scaling to get remove the friction compensation from the motor speed
     def set_motor_speed(self,motor,speed):
         # global cali_speed_value,cali_dir_value
         motor -= 1
@@ -105,18 +110,21 @@ class Picarx(object):
         self.config_flie.set("picarx_dir_servo", "%s"%value)
         self.dir_servo_pin.angle(value)
     
+    # creating an variable self.cali_angle that generates an effective steer angle 
+    # keeping the installation error in mind
     def set_dir_servo_angle(self,value):
         # global dir_cal_value
         angle_value  = value + self.cali_angle
-        # 50 = 40 + 10
-        # -30 = -40 + 10
+        
+        # checking for maximum angles the vehicle can maechanically move
+        # setting 40deg as the maximum angle on both sides from the centerline
         if angle_value >= 0 and angle_value > 40 + self.cali_angle:
             self.dir_current_angle = 40 + self.cali_angle
         elif angle_value < 0 and angle_value < -40 + self.cali_angle:
             self.dir_current_angle = -40 + self.cali_angle
         else:
             self.dir_current_angle = angle_value
-        #print("servo angle after calibration:",self.dir_current_angle)
+        # print("servo angle after calibration:",self.dir_current_angle)
         # print("set_dir_servo_angle_1:",angle_value)
         # print("set_dir_servo_angle_2:",dir_cal_value)
         self.dir_servo_pin.angle(angle_value)
@@ -178,6 +186,7 @@ class Picarx(object):
             self.set_motor_speed(2, speed)  
         return 1
     
+    # the below lines log everytime the forward function starts and ends
     @logdecorator.log_on_start( logging.DEBUG," the car begin to move forward with speed: {speed!s}") # :s for strings
     @logdecorator.log_on_end( logging.DEBUG," the car successfully moved forward")
     def forward(self,speed):
@@ -234,12 +243,15 @@ class Picarx(object):
 
 if __name__ == "__main__":
     px = Picarx()
-    px.forward(5)
-    # shows a command saying KeyboardInterrupt, and calls the func stop
-    #atexit.register(px.cleanup)
+
+    # moving the vehicle forward
+    px.forward(50)
     time.sleep(1)
+
+    # testing how logging module works
     message = "here goes the message"
     logging.debug( message )
+    
     # set_dir_servo_angle(0)
     # time.sleep(1)
     # self.set_motor_speed(1, 1)

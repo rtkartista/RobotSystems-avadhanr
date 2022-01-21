@@ -3,25 +3,30 @@ import atexit
 import time
 import logging
 
+# logging the message with the at a respective timestamp
 logging_format = "%(asctime) s:%(message) s "
 logging.basicConfig( format = logging_format , level = logging.INFO ,datefmt ="%H:%M:%S")
 
 logging.getLogger().setLevel( logging.DEBUG )
 
+# The function is called at the begining of the code to calinrate the zero of the steering
+# Due to the installation error, the steer servo is installed at a -5deg from the centerline 
 def calibrate_steering(picar):
     calibration_angle_error = -5
     picar.set_dir_servo_angle(calibration_angle_error)
     time.sleep(2)
     #picar.forward(30)
     #time.sleep(5)
-
     picar.cali_angle = calibration_angle_error
-        
+
+# Using a fixed turn radius, the motors speeds are calulated for the car
+# these motor speeds move the vehicle on the function call
 def forward_improved(picar, speed):
-    # assuming car base = .6m
+    # assuming car base = .06m
     # constant angular velocity
-    # left wheel velocity
-    # right wheel velocity
+    # calculate
+    #### left wheel velocity
+    #### right wheel velocity
     turn_radius = .15
     base_radius = .06
     car_w = speed/((base_radius/2) + turn_radius)
@@ -47,6 +52,8 @@ def forward_improved(picar, speed):
         picar.set_motor_speed(1, speed)
         picar.set_motor_speed(2, -speed)                  
 
+# this function helps the vehicle to perform parallel parking
+# this function utilizes the new forward_improved function to move the car
 def move_pp(picar, dir):
     if dir == -1:
         # start at the current location
@@ -79,6 +86,8 @@ def move_pp(picar, dir):
         time.sleep(1)
         picar.stop()
 
+# this function helps the vehicle to perform three point turn
+# this function utilizes the new forward_improved function to move the car
 def move_3pt(picar, dir):
     if dir == -1:
         # steer -90deg, forward
@@ -108,6 +117,9 @@ def move_3pt(picar, dir):
         forward_improved(picar, 70)
         time.sleep(.9)
         picar.set_dir_servo_angle(0)
+
+# this function helps the vehicle to perform various maneuvers
+# this function utilizes the new forward_improved function to perform basic moves with and without the steer
 def move(picar, command):
     if command == "L":
         picar.set_dir_servo_angle(-40)
@@ -140,6 +152,8 @@ def move(picar, command):
     elif command == "3PL":
         move_3pt(picar, -1)
 
+# this funtion imforms the user about all the available vehicle maneuvers
+# type in an input to see the vehicle perform the respective maneuvers
 def user_input(picar):
     print("Enter the following commands to move the vehicle.")
     print("-------------------------------------------------")
@@ -152,17 +166,14 @@ def user_input(picar):
 
 if __name__ == "__main__":
     px = picarxy_improved.Picarx()
-    calibrate_steering(px)
-    print("Use "+str(px.cali_angle)+" to modify steering commands.")
-    # calibrate everytime the car boots.
-    forward_improved(px, 30)
-    time.sleep(1)
-    px.set_dir_servo_angle(15)
-    forward_improved(px, 70)
-    time.sleep(3)
-    user_input(px)
 
-    # shows a command saying KeyboardInterrupt, and calls the func stop
-    atexit.register(px.stop)
+    # calibrate everytime the car boots.
+    calibrate_steering(px)
     message = "Calibrated the steering"
     logging.debug(message)
+    print("Using "+str(px.cali_angle)+" to modify steering commands.")
+    
+    # move the vehicle
+    user_input(px)
+
+    
