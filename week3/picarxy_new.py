@@ -296,17 +296,18 @@ class Controller(object):
     def controller(self, gm_status):
         # use the scaling factor and command a steer
         # the scaling factor between the interpreted offset from the line and the angle by which to steer
-        steer_angle = self.scaling_fac * gm_status['diff']
         if gm_status['str'] == 'forward':
             print("Moving Forward")
             self.picar.forward_improved(self.velocity) 
 
         elif gm_status['str'] == 'right':
+            steer_angle = self.scaling_fac * gm_status['diff']
             self.picar.set_dir_servo_angle(steer_angle)
             print("Moving Right")
             self.picar.forward_improved(self.velocity) 
 
         elif gm_status['str'] == 'left':
+            steer_angle = self.scaling_fac * gm_status['diff']
             self.picar.set_dir_servo_angle(steer_angle)
             print("Moving Left")
             self.picar.forward_improved(self.velocity) 
