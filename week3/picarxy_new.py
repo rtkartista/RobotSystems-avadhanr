@@ -299,21 +299,21 @@ class Controller(object):
         steer_angle = self.scaling_fac * gm_status['diff']
         if gm_status['str'] == 'forward':
             print("Moving Forward")
-            px.forward_improved(self.velocity) 
+            self.picar.forward_improved(self.velocity) 
 
         elif gm_status['str'] == 'right':
-            px.set_dir_servo_angle(steer_angle)
+            self.picar.set_dir_servo_angle(steer_angle)
             print("Moving Right")
-            px.forward_improved(self.velocity) 
+            self.picar.forward_improved(self.velocity) 
 
         elif gm_status['str'] == 'left':
-            px.set_dir_servo_angle(steer_angle)
+            self.picar.set_dir_servo_angle(steer_angle)
             print("Moving Left")
-            px.forward_improved(self.velocity) 
+            self.picar.forward_improved(self.velocity) 
         else:
-            px.set_dir_servo_angle(0)
+            self.picar.set_dir_servo_angle(0)
             print("Stopping the car")
-            px.stop()
+            self.picar.stop()
 
 if __name__ == "__main__":
     px = Picarx()
