@@ -245,7 +245,7 @@ class Sensors(object):
 class Interpreter(object):
     # dark = 1, light = 0
     # polarity: line the system follows - higher sensitivity - polarity 0
-    def __init__(self, polarity = 0, sensitivity = 200):
+    def __init__(self, polarity = 1, sensitivity = 200):
         self.polarity = polarity
         self.sensitivity = sensitivity
 
