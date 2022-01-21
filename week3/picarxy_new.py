@@ -321,15 +321,16 @@ if __name__ == "__main__":
     message = "Begin automatic steering"
     logging.debug( message )
 
-    gm = Interpreter(500)
+    sm = Sensors()
+    im = Interpreter(500)
     px = Picarx()
     cx = Controller(px)
     while True:
-        gm_val_list = gm.get_grayscale_data()
-        print("gm_val_list:",gm_val_list)
-        gm_status = gm.get_line_status(gm_val_list)
-        print("gm_status:",gm_status)
-        cx.controller(gm_status)
+        sm_val_list = sm.get_grayscale_data()
+        print("sm_val_list:",sm_val_list)
+        im_status = im.get_line_status(sm_val_list)
+        print("im_status:",im_status)
+        cx.controller(im_status)
         print("Steered")
 
         
