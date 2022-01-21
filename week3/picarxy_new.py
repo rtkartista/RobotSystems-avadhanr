@@ -255,13 +255,19 @@ class Interpreter(object):
         # l l l
         if fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity:
             diff = fl_list[1] - fl_list[2]
-            d['str'] = 'stop'
+            if self.polarity == 0:
+                d['str'] = 'stop'
+            else:
+                d['str'] = 'forward'
             d['diff'] = diff
             return d
         # d d d    
         elif fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] <= self.sensitivity:
             diff = fl_list[1] - fl_list[2]
-            d['str'] = 'forward'
+            if self.polarity == 0:
+                d['str'] = 'forward'
+            else:
+                d['str'] = 'stop'
             d['diff'] = diff
             return d
         # l l d
@@ -269,7 +275,10 @@ class Interpreter(object):
         elif (fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity) or \
         (fl_list[0] > self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] <= self.sensitivity):
             diff = fl_list[1] - fl_list[2]
-            d['str'] = 'right'
+            if self.polarity == 0:
+                d['str'] = 'right'
+            else:
+                d['str'] = 'left'
             d['diff'] = diff
             return d
         # d d l
@@ -277,7 +286,10 @@ class Interpreter(object):
         elif (fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] > self.sensitivity) or \
             (fl_list[0] <= self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity):
             diff = fl_list[1] - fl_list[2]
-            d['str'] = 'left'
+            if self.polarity == 0:
+                d['str'] = 'left'
+            else:
+                d['str'] = 'right'
             d['diff'] = diff
             return d
          
