@@ -322,7 +322,7 @@ if __name__ == "__main__":
     logging.debug( message )
 
     sm = Sensors()
-    im = Interpreter(500)
+    im = Interpreter(200)
     px = Picarx()
     cx = Controller(px)
     while True:
