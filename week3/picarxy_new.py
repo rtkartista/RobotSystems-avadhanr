@@ -326,7 +326,7 @@ if __name__ == "__main__":
     px = Picarx()
     cx = Controller(px)
     while True:
-        sm_val_list = sm.get_grayscale_data()
+        sm_val_list = sm.get_adc_value()
         print("sm_val_list:",sm_val_list)
         im_status = im.get_line_status(sm_val_list)
         print("im_status:",im_status)
