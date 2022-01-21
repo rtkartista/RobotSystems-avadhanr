@@ -332,5 +332,6 @@ if __name__ == "__main__":
         print("im_status:",im_status)
         cx.controller(im_status)
         print("Steered")
+        time.sleep(1)
 
         
