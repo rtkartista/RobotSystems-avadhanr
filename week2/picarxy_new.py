@@ -1,4 +1,3 @@
-#from ezblock import Servo,PWM,fileDB,Pin,ADC
 import logging
 import logdecorator
 import atexit
@@ -18,6 +17,8 @@ logging.basicConfig( format = logging_format , level = logging.INFO ,datefmt ="%
 
 logging.getLogger().setLevel( logging.DEBUG )
 
+# added the calibrate_steering and the forward_improved funtions to the picar class
+# removed the sensor methods from the class for future week assignments
 class Picarx(object):
     PERIOD = 4095
     PRESCALER = 10
@@ -33,11 +34,6 @@ class Picarx(object):
         self.left_rear_dir_pin = Pin("D4")
         self.right_rear_dir_pin = Pin("D5")
 
-        self.S0 = ADC('A0')
-        """
-        self.S1 = ADC('A1')
-        self.S2 = ADC('A2')"""
-
         self.motor_direction_pins = [self.left_rear_dir_pin, self.right_rear_dir_pin]
         self.motor_speed_pins = [self.left_rear_pwm_pin, self.right_rear_pwm_pin]
         self.cali_dir_value = self.config_flie.get("picarx_dir_motor", default_value="[1,1]")
@@ -50,8 +46,11 @@ class Picarx(object):
             pin.period(self.PERIOD)
             pin.prescaler(self.PRESCALER)
         
+        # shows a command saying KeyboardInterrupt, and calls the function cleanup from the picar methods
         atexit.register(self.cleanup)
 
+
+    # commented out the speed scaling to get remove the friction compensation from the motor speed
     def set_motor_speed(self,motor,speed):
         # global cali_speed_value,cali_dir_value
         motor -= 1
@@ -95,19 +94,22 @@ class Picarx(object):
         print("calibrationdir_cal_value:",self.dir_cal_value)
         self.config_flie.set("picarx_dir_servo", "%s"%value)
         self.dir_servo_pin.angle(value)
-
+    
+    # creating an variable self.cali_angle that generates an effective steer angle 
+    # keeping the installation error in mind
     def set_dir_servo_angle(self,value):
         # global dir_cal_value
         angle_value  = value + self.cali_angle
-        # 50 = 40 + 10
-        # -30 = -40 + 10
+        
+        # checking for maximum angles the vehicle can maechanically move
+        # setting 40deg as the maximum angle on both sides from the centerline
         if angle_value >= 0 and angle_value > 40 + self.cali_angle:
             self.dir_current_angle = 40 + self.cali_angle
         elif angle_value < 0 and angle_value < -40 + self.cali_angle:
             self.dir_current_angle = -40 + self.cali_angle
         else:
             self.dir_current_angle = angle_value
-        #print("servo angle after calibration:",self.dir_current_angle)
+        # print("servo angle after calibration:",self.dir_current_angle)
         # print("set_dir_servo_angle_1:",angle_value)
         # print("set_dir_servo_angle_2:",dir_cal_value)
         self.dir_servo_pin.angle(angle_value)
@@ -131,7 +133,8 @@ class Picarx(object):
             self.set_motor_speed(1, -1*speed)
             self.set_motor_speed(2, speed)  
         return 1
-    
+
+    # the below lines log everytime the forward function starts and ends
     @logdecorator.log_on_start( logging.DEBUG," the car begin to move forward with speed: {speed!s}") # :s for strings
     @logdecorator.log_on_end( logging.DEBUG," the car successfully moved forward")
     def forward(self,speed):
@@ -159,6 +162,51 @@ class Picarx(object):
 
     def cleanup(self):
         self.stop()
+
+    # The function is called at the begining of the code to calinrate the zero of the steering
+    # Due to the installation error, the steer servo is installed at a -5deg from the centerline 
+    def calibrate_steering(self):
+        calibration_angle_error = -5
+        self.set_dir_servo_angle(calibration_angle_error)
+        time.sleep(2)
+        #picar.forward(30)
+        #time.sleep(5)
+        self.cali_angle = calibration_angle_error
+
+    # Using a fixed turn radius, the motors speeds are calulated for the car
+    # these motor speeds move the vehicle on the function call
+    def forward_improved(self, speed):
+        # assuming car base = .06m
+        # constant angular velocity
+        # calculate
+        #### left wheel velocity
+        #### right wheel velocity
+        turn_radius = .15
+        base_radius = .06
+        car_w = speed/((base_radius/2) + turn_radius)
+        current_angle = self.dir_current_angle
+
+        if current_angle != self.cali_angle:
+            # move left/right
+            abs_current_angle = abs(current_angle)
+            if (current_angle / abs_current_angle) < 0:
+                speed_left = car_w * turn_radius
+                speed_right = car_w * (turn_radius + base_radius)
+                #print(str(speed_right)+ " "+str(speed_left))
+                self.set_motor_speed(1, speed_left)
+                self.set_motor_speed(2, -speed_right)
+            elif (current_angle / abs_current_angle) > 0:
+                speed_right = car_w * turn_radius
+                speed_left = car_w * (turn_radius + base_radius)
+                #print(str(speed_right)+ " "+str(speed_left))
+                self.set_motor_speed(1, speed_left)
+                self.set_motor_speed(2, -speed_right)
+        else:
+            # go straight
+            self.set_motor_speed(1, speed)
+            self.set_motor_speed(2, -speed)                  
+
+
 
 if __name__ == "__main__":
     px = Picarx()
