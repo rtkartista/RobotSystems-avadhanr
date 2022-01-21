@@ -243,17 +243,42 @@ class Sensors(object):
         return adc_value_list
 
 class Interpreter(object):
-    # dark = 1, loght = 0
-    # polarity: line the system follows
-    def __init__(self, polarity = 0, sensitivity = 1):
+    # dark = 1, light = 0
+    # polarity: line the system follows - higher sensitivity - polarity 0
+    def __init__(self, polarity = 0, sensitivity = 200):
         self.polarity = polarity
-        self. sensitivity = sensitivity
+        self.sensitivity = sensitivity
 
-    def robot_relative_loc(self, sensor_output):
+    def get_line_status(self,fl_list):
+        d = dict(); 
+        # add code regarding polarity
+        # l l l
+        if fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] <= self.sensitivity:
+            diff = fl_list[1] - fl_list[2]
+            d['str'] = 'stop'
+            d['diff'] = diff
+            return d
+        # d d d    
+        elif fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity:
+            diff = fl_list[1] - fl_list[2]
+            d['str'] = 'forward'
+            d['diff'] = diff
+            return d
+        # l l d
+        elif fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] > self.sensitivity:
+            diff = fl_list[1] - fl_list[2]
+            d['str'] = 'right'
+            d['diff'] = diff
+            return d
+        # d d l
+        elif fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity:
+            diff = fl_list[1] - fl_list[2]
+            d['str'] = 'left'
+            d['diff'] = diff
+            return d
         # robust to lighting conditions
         # [-1, 1] with respect to a edge detected
         # +1 = line left to the robot
-        return 0
 
     # def Lane_following(self):
     # example/color_detect.py
@@ -261,16 +286,34 @@ class Interpreter(object):
 
 
 class Controller(object):
-    # scaling factor - between the interpreted offset from the line 
     # and the angle by which to steer
-    def __init__(self, picar, scaling_fac = 0.5):
+    def __init__(self, picar, scaling_fac = 0.01):
         self.scaling_fac = scaling_fac
         self.picar = picar
+        self.velocity = 70
+
     
-    def conntroller(self):
+    def controller(self, gm_status):
         # use the scaling factor and command a steer
-        scaled_value = self.scaling_fac # get the interpreter value
-        self.picar.set_dir_servo_angle(scaled_value)
+        # the scaling factor between the interpreted offset from the line and the angle by which to steer
+        steer_angle = self.scaling_fac * gm_status['diff']
+        if gm_status['str'] == 'forward':
+            print("Moving Forward")
+            px.forward_improved(self.velocity) 
+
+        elif gm_status['str'] == 'right':
+            px.set_dir_servo_angle(steer_angle)
+            print("Moving Right")
+            px.forward_improved(self.velocity) 
+
+        elif gm_status['str'] == 'left':
+            px.set_dir_servo_angle(steer_angle)
+            print("Moving Left")
+            px.forward_improved(self.velocity) 
+        else:
+            px.set_dir_servo_angle(0)
+            print("Stopping the car")
+            px.stop()
 
 if __name__ == "__main__":
     px = Picarx()
@@ -278,9 +321,15 @@ if __name__ == "__main__":
     message = "Begin automatic steering"
     logging.debug( message )
 
-    while(1):
-        # get the sensor reading
-        # detect colour on the floor
-        # steer the vehicle
-        px.forward_improved(70)
-        time.sleep(.5)
+    gm = Interpreter(500)
+    px = Picarx()
+    cx = Controller()
+    while True:
+        gm_val_list = gm.get_grayscale_data()
+        print("gm_val_list:",gm_val_list)
+        gm_status = gm.get_line_status(gm_val_list)
+        print("gm_status:",gm_status)
+        cx.controller(gm_status)
+        print("Steered")
+
+        
