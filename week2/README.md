@@ -33,7 +33,7 @@
 - added atexit funtions in the class *__init__* function
 - due to placement error while installing the servo, the caliration angle for the servo is -5deg. At the start of the motion, the vehicle is calibrated. This angle is also saved as a class variable and used in the function *set_dir_servo_angle* to give out correct steering results 
 - The friction contibution from the *set_motor_speed* method is also removed and it was obseved that my vehicle moved at 30m/s after overcoming static friction.
-- a forward_imporved function is written to account for variation of motor speeds in both the directions when the vehicle has a sterr angle. 
+- a forward_imporved function is written to account for variation of motor speeds in both the directions when the vehicle has a sterr angle. Instead of directly using the power_scale factor I tried something new
     * Base width is assumed to be 12cm
     * Turn angle is assumed to be 25cm
     * Based on the formule *V_car = w_car \* turn_radius*, *V_left* and *V_right* are calulated by first calcuating the *w_car* and later by substituting different effective *turn_radius* for each wheel.
