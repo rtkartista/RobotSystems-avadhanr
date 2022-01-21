@@ -253,20 +253,20 @@ class Interpreter(object):
         d = dict(); 
         # add code regarding polarity
         # l l l
-        if fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] <= self.sensitivity:
+        if fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity:
             diff = fl_list[1] - fl_list[2]
             d['str'] = 'stop'
             d['diff'] = diff
             return d
         # d d d    
-        elif fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity:
+        elif fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] <= self.sensitivity:
             diff = fl_list[1] - fl_list[2]
             d['str'] = 'forward'
             d['diff'] = diff
             return d
         # l l d
         # d l l
-        elif (fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] > self.sensitivity) or \
+        elif (fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity) or \
         (fl_list[0] <= self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity):
             diff = fl_list[1] - fl_list[2]
             d['str'] = 'right'
@@ -274,8 +274,8 @@ class Interpreter(object):
             return d
         # d d l
         # d l l
-        elif (fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity) or \
-            (fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity):
+        elif (fl_list[0] <= self.sensitivity and fl_list[1] <= self.sensitivity and fl_list[2] > self.sensitivity) or \
+            (fl_list[0] <= self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity):
             diff = fl_list[1] - fl_list[2]
             d['str'] = 'left'
             d['diff'] = diff
@@ -295,7 +295,7 @@ class Controller(object):
     def __init__(self, picar, scaling_fac = 0.01):
         self.scaling_fac = scaling_fac
         self.picar = picar
-        self.velocity = 70
+        self.velocity = 60
 
     
     def controller(self, gm_status):
@@ -305,12 +305,12 @@ class Controller(object):
             print("Moving Forward")
             self.picar.forward_improved(self.velocity) 
         elif gm_status['str'] == 'right':
-            steer_angle = self.scaling_fac * gm_status['diff']
+            steer_angle = self.scaling_fac * abs(gm_status['diff'])
             self.picar.set_dir_servo_angle(steer_angle)
             print("Moving Right")
             self.picar.forward_improved(self.velocity) 
         elif gm_status['str'] == 'left':
-            steer_angle = self.scaling_fac * gm_status['diff']
+            steer_angle = - self.scaling_fac * abs(gm_status['diff'])
             self.picar.set_dir_servo_angle(steer_angle)
             print("Moving Left")
             self.picar.forward_improved(self.velocity) 
