@@ -79,7 +79,7 @@ class PWM(I2C):
         else:
             self._prescaler = int(prescaler[0]) - 1
             reg = self.REG_PSC + self.timer
-            self._debug("Set prescaler to: %s"%self._prescaler)
+            #self._debug("Set prescaler to: %s"%self._prescaler)
             self.i2c_write(reg, self._prescaler)
 
     def period(self, *arr):
