@@ -11,6 +11,11 @@ try :
     import sys
     sys.path.append(r'/home/pi/picar/lib')
     from sys import *
+    from servo import Servo 
+    from pwm import PWM
+    from pin import Pin
+    from adc import ADC
+    from filedb import fileDB
     time.sleep (0.01)
 except ImportError :
     print (" This computer does not appear to be a PiCar - X system ( ezblock is not present ) . Shadowing hardware calls with substitute functions ")
