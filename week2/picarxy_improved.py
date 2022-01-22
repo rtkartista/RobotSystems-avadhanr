@@ -1,6 +1,4 @@
-"""import sys
-sys.path.append(r'/home/pi/picar/Robotsystems_avadhanr/lib')
-"""
+
 #from ezblock import Servo,PWM,fileDB,Pin,ADC
 import logging
 import logdecorator
@@ -10,8 +8,10 @@ import atexit
 # if not import the modules from the newly created file sim_ezblock
 import time
 try :
-    from ezblock import *
-    from ezblock import __reset_mcu__
+    import sys
+    sys.path.append(r'/home/pi/picar/Robotsystems_avadhanr/lib')
+    from sys import *
+    from sys import __reset_mcu__
     __reset_mcu__ ()
     time.sleep (0.01)
 except ImportError :
