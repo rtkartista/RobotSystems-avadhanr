@@ -9,7 +9,7 @@ import atexit
 import time
 try :
     import sys
-    sys.path.append(r'/home/pi/picar/week2/lib')
+    sys.path.append(r'/home/pi/picar/lib')
     from sys import *
     time.sleep (0.01)
 except ImportError :
