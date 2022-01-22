@@ -9,7 +9,7 @@ import atexit
 import time
 try :
     import sys
-    sys.path.append(r'/home/pi/picar/Robotsystems_avadhanr/lib')
+    sys.path.append(r'/home/pi/picar/week2/lib')
     from sys import *
     from sys import __reset_mcu__
     __reset_mcu__ ()
