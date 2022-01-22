@@ -10,7 +10,7 @@ import time
 try :
     import sys
     sys.path.append(r'/home/pi/picar/lib')
-    from sys import *
+    #from sys import *
     from servo import Servo 
     from pwm import PWM
     from pin import Pin
