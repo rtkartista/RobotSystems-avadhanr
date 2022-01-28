@@ -16,6 +16,7 @@ except ImportError :
     print (" This computer does not appear to be a PiCar - X system ( ezblock is not present ) . Shadowing hardware calls with substitute functions ")
     from sim_ezblock import *
 
+from concurrency import Concurrency
 logging_format = "%(asctime) s:%(message) s "
 logging.basicConfig( format = logging_format , level = logging.INFO ,datefmt ="%H:%M:%S")
 
