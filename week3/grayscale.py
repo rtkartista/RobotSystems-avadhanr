@@ -40,6 +40,6 @@ if __name__ == "__main__":
     cx = Controller()
     while True:
         data = px.get_grayscale_data()
-        im_status = GM.get_line_status(m[1], sdev[1], data)
+        im_status = GM.get_line_status(data)
         cx.controller(im_status)
         time.sleep(1)
