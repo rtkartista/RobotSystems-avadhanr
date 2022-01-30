@@ -1,10 +1,13 @@
 from readerwriterlock import rwlock
-import concurrent.futures
+import concurrent.futures as cf
 
-class Concurrency(object):
+class Concur(object):
     def __init__(self):
-        self.message = "store message to transfer"
+        self.message = "sensor value"
         self.lock = rwlock.RWLockWriteD()
+        self.sensor_delay = 1
+        self.interpreter_delay = 1
+        self.controller_delay = 1
 
 
     def read_message(self):
@@ -28,3 +31,11 @@ class Concurrency(object):
     
     def control_producer(self):
         print("")
+
+if __name__ == "__main__":
+    concur_obj = Concur()
+    with cf.ThreadPoolExecutor(max_workers = 3) as executor :
+        eSensor = executor.submit(concur_obj.sensor_producer, concur_obj.write_message, concur_obj.sensor_delay)
+        eInterpreter = executor.submit(concur_obj.interpreter_con_pro, concur_obj.write_message, concur_obj.read_message, concur_obj.interpreter_delay)
+        eController = executor.submit(concur_obj.control_producer, concur_obj.read_message, concur_obj.controller_delay)
+    eSensor.result()

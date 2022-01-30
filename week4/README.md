@@ -16,8 +16,8 @@
 1. readerwriterlock Python module - `python3 -m pip install -U readerwriterlock`
 
 ### Observations
-1. added `eSensor . result ()` in the `picar_new2.py` to terminate the program by hitting Ctrl+c only once
+1. added `eSensor.result()` in the `picar_new2.py` to terminate the program by hitting Ctrl+c only once
 2. in the assignment, `readerwriterlock` was used to set the following three priorities
-    - Only one thread is allowed to write the bus message at any given time, and may not start writing while any other thread is reading the message
-    - Any number of threads may read the bus message at any given time, but may not start reading while a thread is writing the message
-    - Write operations are given priority over read operations
+    - Only one thread is allowed to write the bus message at any given time, and may not start writing while any other thread is reading the message, to avoid in mistakes in updating the messages
+    - Any number of threads may read the bus message at any given time, but may not start reading while a thread is writing the message, to avoid reading incorrect data
+    - Write operations are given priority over read operations, to allow most uptodate information in use.
