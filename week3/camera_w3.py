@@ -6,10 +6,11 @@ from picarx_new import *
 import time
 import math 
 import logging
+from week3.grayscale import Interpreter
 
 from week3.picarxy_new import Sensors
 
-class Navigate: 
+class Interpretor: 
     def __init__(self) -> None:
         pass
     def detect_edges(frame):
@@ -85,7 +86,7 @@ class Navigate:
 if __name__=="__main__":
     px = Sensors()
     px.set_camera_servo2_angle(-45)
-    nv = Navigate()
+    nv = Interpreter()
     for i in range(1000):
         edges = nv.detect_edges()
         cropped_edges = nv.region_of_interest(edges)
