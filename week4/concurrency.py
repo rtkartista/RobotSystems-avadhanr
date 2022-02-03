@@ -10,20 +10,23 @@ import control
 def sensor_producer(bus_class, delay_time):
     sx = sensors.Sensors()
     while(1):
-        bus_class.write_message()
+        msg = sx.get_adc_value()
+        bus_class.write_message(msg)
         time.sleep(delay_time)
 
 def interpreter_con_pro(bus_class1, bus_class2, delay_time):
     ip = interpretor.Interpreter()
     while(1):
-        bus_class1.read_message()
-        bus_class2.write_message()
+        msg = bus_class1.read_message()
+        msg2 = ip.get_line_status(msg)
+        bus_class2.write_message(msg2)
         time.sleep(delay_time)
 
 def control_producer(bus_class, delay_time):
     con = control.Controller()
     while(1):
-        bus_class.read_message()
+        msg = bus_class.read_message()
+        con.controller(msg)
         time.sleep(delay_time)
 
 
