@@ -3,12 +3,12 @@ from picarxy_new import *
 
 class Controller(object):
     # and the angle by which to steer
-    def __init__(self, picar, scaling_fac = 5):
+    def __init__(self, picar, scaling_fac = 0.01):
         self.scaling_fac = scaling_fac
         self.picar = picar
         self.velocity = 60
     
-    def controller_old(self, gm_status):
+    def controller(self, gm_status):
         # use the scaling factor and command a steer
         # the scaling factor between the interpreted offset from the line and the angle by which to steer
         if gm_status['str'] == 'forward':
@@ -28,15 +28,3 @@ class Controller(object):
             self.picar.set_dir_servo_angle(0)
             print("Stopping the car")
             self.picar.stop()
-
-    def controller(self, direction):
-        # controller with finer interpreter
-        if direction == 1:
-            self.picar.set_dir_servo_angle(0)
-            print("Stopping the car")
-            self.picar.stop()
-        else:
-            self.picar.set_dir_servo_angle(self.scaling_fac * direction)
-            print("Moving")
-            self.picar.forward_improved(self.velocity)
- 

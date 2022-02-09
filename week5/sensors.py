@@ -40,6 +40,17 @@ class Sensors(object):
         # print("self.cam_cal_value_2:",self.cam_cal_value_2)
         print((value + self.cam_cal_value_2))
 
+    def calibrate(self):
+        all_vals = []
+        for i in range(100): 
+            all_vals.append(self.get_adc_value())
+        all_vals = np.array(all_vals)
+        min = all_vals[0].mean(axis=0)
+        max = (all_vals[1].mean(axis=0) + all_vals[2].mean(axis=0)) / 2
+
+        #assume gaussian noise and accept values within 1 std of the mean as that sensor value. 
+        return [min, max]
+
     def get_adc_value(self):
         adc_value_list = []
         adc_value_list.append(self.S0.read())
