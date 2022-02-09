@@ -46,4 +46,12 @@ class Sensors(object):
         adc_value_list.append(self.S1.read())
         adc_value_list.append(self.S2.read())
         return adc_value_list
+        
+    def sensor_producer(bus_class, delay_time):
+        while(1):
+            print("sensor_producer")
+            msg = self.get_adc_value()
+            bus_class.write_message(msg)
+            print(msg)
+            time.sleep(delay_time)
 

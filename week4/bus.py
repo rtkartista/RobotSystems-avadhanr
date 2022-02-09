@@ -5,11 +5,12 @@ class Bus(object):
         self.lock = rwlock.RWLockWriteD()
 
     def read_message(self):
-        print("returns message")
         with self.lock.gen_rlock():
+            # print("read_message")
             message = self.message
         return message
 
     def write_message(self, message):
         with self.lock.gen_wlock():
+            # print("write_message")
             self.message = message

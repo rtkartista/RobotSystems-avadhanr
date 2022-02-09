@@ -98,3 +98,12 @@ class Interpreter(object):
         else:
             rel_dir = 0
         return rel_dir
+        
+    def interpreter_con_pro(bus_class1, bus_class2, delay_time):
+        while(1):
+            print("interpreter_con_pro")
+            msg = bus_class1.read_message()
+            msg2 = self.get_line_status(msg)
+            bus_class2.write_message(msg2)
+            print(msg, msg2)
+            time.sleep(delay_time)

@@ -39,4 +39,10 @@ class Controller(object):
             self.picar.set_dir_servo_angle(self.scaling_fac * direction)
             print("Moving")
             self.picar.forward_improved(self.velocity)
- 
+    
+    def control_producer(bus_class, delay_time):
+        while(1):
+            print("control_producer")
+            msg = bus_class.read_message()
+            self.controller(msg)
+            time.sleep(delay_time)
