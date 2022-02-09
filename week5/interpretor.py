@@ -6,7 +6,7 @@ class Interpreter(object):
         self.sensitivity = sensitivity # brightness adjustment
         self.polarity = polarity # follow the light line by default
         self.threshold = .25
-        self.threshold_u = 0.3
+        self.threshold_u = 1
 
     def get_line_status_old(self,fl_list):
         # follow dark
@@ -101,6 +101,7 @@ class Interpreter(object):
         return rel_dir
 
     def interepreter_u(self, distance):
+        # print(distance)
         if distance >= self.threshold_u:
             return 0
         elif distance < self.threshold_u:

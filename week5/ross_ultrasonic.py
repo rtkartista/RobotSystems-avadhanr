@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # termination, sensor and interpreter busses
     sensor_bus = Bus([1, 1, 1], 'Sensor Bus')
     interpreter_bus = Bus(0, 'Interpreter Bus')
-    us_sensor_bus = Bus([1, 1, 1], 'US Sensor Bus')
+    us_sensor_bus = Bus(0, 'US Sensor Bus')
     us_interpreter_bus = Bus(0, 'US Interpreter Bus')
     termination_bus = Bus(0, 'Termination Bus')
     
