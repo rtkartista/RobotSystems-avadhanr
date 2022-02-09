@@ -17,6 +17,7 @@ if __name__ == "__main__":
     interpreter_bus = Bus(0, 'Interpreter Bus')
     us_sensor_bus = Bus(0, 'US Sensor Bus')
     us_interpreter_bus = Bus(0, 'US Interpreter Bus')
+    us_stopping_bus = Bus(0, "US Stopping Bus")
     termination_bus = Bus(0, 'Termination Bus')
     
     # objects
@@ -30,10 +31,10 @@ if __name__ == "__main__":
 
     wrapped_sensor = Producer(sx.get_adc_value, sensor_bus, delay_time, termination_bus,'sensor')
     wrapped_interpreter = ConsumerProducer(ip.get_line_status, sensor_bus, interpreter_bus, delay_time, termination_bus,'interpreter')
-    wrapped_controller = Consumer(cx.controller, interpreter_bus, delay_time, termination_bus,'controller')
+    wrapped_controller = Consumer(cx.controller_new, (interpreter_bus, us_interpreter_bus), delay_time, termination_bus,'controller')
     us_wrapped_sensor = Producer(sx.read, us_sensor_bus, delay_time, termination_bus,'US sensor')
     us_wrapped_interpreter = ConsumerProducer(ip.interepreter_u, us_sensor_bus, us_interpreter_bus, delay_time, termination_bus,'US interpreter')
-    us_wrapped_controller = Consumer(cx.controller_u, (us_interpreter_bus, interpreter_bus), delay_time, termination_bus,'US controller')
+    us_wrapped_controller = Consumer(cx.controller_u, (us_interpreter_bus, interpreter_bus), us_interpreter_bus, delay_time, termination_bus,'US controller')
     wrapped_timer = Timer(termination_bus, 5, delay_time, termination_bus, 'termination timer')
     
      

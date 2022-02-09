@@ -40,14 +40,28 @@ class Controller(object):
             print("Moving")
             self.picar.forward_improved(self.velocity)
     
+    def controller_new(self, direction, controller_u_status = 0):
+        # controller with finer interpreter
+        if direction == 1 or controller_u_status == 1:
+            self.picar.set_dir_servo_angle(0)
+            print("Stopping the car")
+            self.picar.stop()
+        else:
+            self.picar.set_dir_servo_angle(self.scaling_fac * direction)
+            print("Moving")
+            self.picar.forward_improved(self.velocity)
+    
+
     def controller_u(self,command,direction):
         if command == 1:
             print('STOPPING')
             self.picar.stop()
+            return 1
         elif command == 0:
             print('GOING')
             speed = -40*abs(direction) + 50
             self.picar.forward_improved(speed)
+            return 0 
 
     def control_producer(self, bus_class, delay_time):
         while(1):
