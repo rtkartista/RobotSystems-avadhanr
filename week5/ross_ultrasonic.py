@@ -33,7 +33,7 @@ if __name__ == "__main__":
     wrapped_controller = Consumer(cx.controller, interpreter_bus, delay_time, termination_bus,'controller')
     us_wrapped_sensor = Producer(sx.read, us_sensor_bus, delay_time, termination_bus,'US sensor')
     us_wrapped_interpreter = ConsumerProducer(ip.interepreter_u, us_sensor_bus, us_interpreter_bus, delay_time, termination_bus,'US interpreter')
-    us_wrapped_controller = Consumer(cx.controller_u, us_interpreter_bus, delay_time, termination_bus,'US controller')
+    us_wrapped_controller = Consumer(cx.controller_u, (us_interpreter_bus, interpreter_bus), delay_time, termination_bus,'US controller')
     wrapped_timer = Timer(termination_bus, 5, delay_time, termination_bus, 'termination timer')
     
      
