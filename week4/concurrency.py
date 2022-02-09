@@ -5,6 +5,7 @@ import bus
 import sensors
 import interpretor
 import control
+import picarxy_new as pcx
 
 # below three functions are run in a loop with a delay
 if __name__ == "__main__":
@@ -14,9 +15,10 @@ if __name__ == "__main__":
     bus_obj2 = bus.Bus()
     
     # sic objects
+    px = pcx.Picarx()
     sx = sensors.Sensors()
     ip = interpretor.Interpreter()
-    cx = control.Controller(5)
+    cx = control.Controller(px)
     
     # thread delay time
     delay_time = 1
