@@ -40,7 +40,7 @@ class Controller(object):
             print("Moving")
             self.picar.forward_improved(self.velocity)
     
-    def control_producer(bus_class, delay_time):
+    def control_producer(self, bus_class, delay_time):
         while(1):
             print("control_producer")
             msg = bus_class.read_message()

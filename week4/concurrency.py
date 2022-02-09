@@ -14,9 +14,9 @@ if __name__ == "__main__":
     bus_obj2 = bus.Bus()
     
     # sic objects
-    sx = Sensors()
-    ip = Interpreter()
-    cx = Controller()
+    sx = sensors.Sensors()
+    ip = interpretor.Interpreter()
+    cx = control.Controller(5)
     
     # thread delay time
     delay_time = 1
