@@ -1,28 +1,19 @@
-# RossROS
+## Simultaneity
+### sensing, interpretation, and control run independently and in parallel
+- Multitasking, in which a single processor rapidly switches between the different functions it is executing, and
+    - cooperative -  the time-sharing of the processor is determined by the functions themselves
+    - preemtive - threading -  the time-sharing of the processor is allocated externally by the computer’s operating system
+- Multiprocessing, in which the functions are assigned to dedicated processors.
 
-RossROS is:
+### Tasks
+1. Defined functions in `concurrency.py` which has a variable takes in busses to read, interpret and utilize the sensor data in between threads. Defined a producer, consumer-producer, or consumer functions for the sensor, interpretation and control processes from week 3 using only the grayscale module.
+3. The three defined functions are called in a loop in the `concurrency.py function`.
 
-* A minimal robot operating system
-* Written in Python
-* Designed to illustrate concepts that appear in ROS, but with less overhead and more accessibility
+### Installations
+1. readerwriterlock Python module - `python3 -m pip install -U readerwriterlock`
 
-## Why RossROS?
-
-ROS is powerful, but has a lot of overhead. If you want to actually teach/learn how it works, a simpler system is more desirable. The RossROS kernel is approximately 300 lines of code, extensively commented, and therefore tractable to understand.
-
-In our documentation, we also supply a set of suggested lessons for writing the components of RossROS from scratch in a scaffolded learning approach.
-
-## Core components
-
-### Message bus
-
-Similar to ROS Topic (publish/subscribe model)
-
-Implemented as cached messages -- any bus can be written to or read from by multiple processes, with readers getting the most recently-written message
-
-### Consumer-Producers
-
-Python class that wraps a function to 
-* Run on a set frequency
-* Take its inputs from a list of message busses
-* Deal its outputs to a second list of message busses
+### Observations
+1. in the assignment, `readerwriterlock` was used to set the following three priorities
+    - Only one thread is allowed to write the bus message at any given time, and may not start writing while any other thread is reading the message, to avoid in mistakes in updating the messages
+    - Any number of threads may read the bus message at any given time, but may not start reading while a thread is writing the message, to avoid reading incorrect data
+    - Write operations are given priority over read operations, to allow most uptodate information in use.
