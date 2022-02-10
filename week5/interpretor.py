@@ -6,7 +6,7 @@ class Interpreter(object):
         self.sensitivity = sensitivity # brightness adjustment
         self.polarity = polarity # follow the light line by default
         self.threshold = .25
-        self.threshold_u = 1
+        self.threshold_u = 25
 
     def get_line_status_old(self,fl_list):
         # follow dark
@@ -64,37 +64,87 @@ class Interpreter(object):
         if max_diff > self.threshold:
             left_diff = normalize[1] - normalize[0]
             right_diff = normalize[1] - normalize[2]
-            # follow light
+            # follow dark
             if self.polarity == 1:
                 # 000
-                if normalize[0] > self.sensitivity and normalize[1] > self.sensitivity and normalize[2] > self.sensitivity:
+                if fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity:
                     print("stop")
                     return 1
                 # 001
                 # 101
-                elif normalize[1] > self.sensitivity and normalize[2] <= self.sensitivity:
+                elif fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity:
                     print("right")
                     return right_diff
                 # 100
-                elif normalize[0] <= self.sensitivity and normalize[1] > self.sensitivity:
+                elif fl_list[0] <= self.sensitivity and fl_list[1] > self.sensitivity:
+                    print("left")
+                    return -left_diff
+
+            # follow light
+            else:
+                # 111
+                if fl_list[1] <= self.sensitivity:
+                    print("stop")
+                    return 1
+                # 110
+                # 010
+                elif fl_list[1] <= self.sensitivity and fl_list[2] > self.sensitivity:
+                    print("right")
+                    return right_diff
+                # 011
+                elif fl_list[0] > self.sensitivity and fl_list[1] <= self.sensitivity:
+                    print("left")
+                    return left_diff
+
+        else:
+            # follow dark
+            if self.polarity == 1:
+                rel_dir = 0
+            else:
+                rel_dir = 1
+        return rel_dir
+
+    def get_line_status(self,fl_list):
+        # send out an differential direction
+        # nomalizing sensor reading between 0 and 1
+        normalize = [float(i)/max(fl_list) for i in fl_list]
+        max_diff = max(normalize)-min(normalize)
+
+        # if difference exceeds brightness diff threshold
+        if max_diff > self.threshold:
+            left_diff = normalize[1] - normalize[0]
+            right_diff = normalize[1] - normalize[2]
+            # follow light
+            if self.polarity == 1:
+                # 000
+                if fl_list[0] > self.sensitivity and fl_list[1] > self.sensitivity and fl_list[2] > self.sensitivity:
+                    print("stop")
+                    return 1
+                # 001
+                # 101
+                elif fl_list[1] > self.sensitivity and fl_list[2] <= self.sensitivity:
+                    print("right")
+                    return -right_diff
+                # 100
+                elif fl_list[0] <= self.sensitivity and fl_list[1] > self.sensitivity:
                     print("left")
                     return -left_diff
 
             # follow dark
             else:
                 # 111
-                if normalize[1] <= self.sensitivity:
+                if fl_list[1] <= self.sensitivity:
                     print("stop")
                     return 1
                 # 110
                 # 010
-                elif normalize[1] <= self.sensitivity and normalize[2] > self.sensitivity:
+                elif fl_list[1] <= self.sensitivity and fl_list[2] > self.sensitivity:
                     print("right")
-                    return right_diff
+                    return -right_diff
                 # 011
-                elif normalize[0] > self.sensitivity and normalize[1] <= self.sensitivity:
+                elif fl_list[0] > self.sensitivity and fl_list[1] <= self.sensitivity:
                     print("left")
-                    return left_diff
+                    return -left_diff
 
         else:
             rel_dir = 0

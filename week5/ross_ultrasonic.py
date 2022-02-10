@@ -35,7 +35,7 @@ if __name__ == "__main__":
     us_wrapped_sensor = Producer(sx.read, us_sensor_bus, delay_time, termination_bus,'US sensor')
     us_wrapped_interpreter = ConsumerProducer(ip.interepreter_u, us_sensor_bus, us_interpreter_bus, delay_time, termination_bus,'US interpreter')
     us_wrapped_controller = ConsumerProducer(cx.controller_u, (us_interpreter_bus, interpreter_bus), us_stopping_bus, delay_time, termination_bus,'US controller')
-    wrapped_timer = Timer(termination_bus, 5, delay_time, termination_bus, 'termination timer')
+    wrapped_timer = Timer(termination_bus, 3, delay_time, termination_bus, 'termination timer')
     
      
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
